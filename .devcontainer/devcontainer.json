@@ -1,0 +1,45 @@
+{
+  "name": "pex-crawler",
+  "otherPortAttributes": {
+    "onAutoForward": "silent"
+  },
+  "postCreateCommand": "pnpm install",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  "customizations": {
+    "extensions": [
+      "esbenp.prettier-vscode"
+    ],
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "[typescript]": {
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": false
+          },
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "git.branchProtection": [
+          "main",
+          "master"
+        ],
+        "editor.formatOnSave": true
+      }
+    },
+    "settings": {
+      "[typescript]": {
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": false
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      },
+      "git.branchProtection": [
+        "main",
+        "master"
+      ],
+      "editor.formatOnSave": true
+    }
+  },
+  "waitFor": "postCreateCommand"
+}
