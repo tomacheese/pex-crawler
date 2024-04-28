@@ -81,7 +81,7 @@ async function main() {
     throw new Error('Discord config is invalid')
   }
 
-  const notifiedPath = process.env.NOTIFIED_PATH || 'data/notified.json'
+  const notifiedPath = process.env.NOTIFIED_PATH ?? 'data/notified.json'
   const notified = new Notified(notifiedPath)
   const isFirst = notified.isFirst()
   if (isFirst) {
