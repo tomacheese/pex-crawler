@@ -2,9 +2,7 @@ import fs from 'node:fs'
 
 export class Notified {
   private path: string
-  private notified: {
-    [key: string]: string
-  } = {}
+  private notified: Record<string, string> = {}
 
   constructor(path: string) {
     this.path = path
