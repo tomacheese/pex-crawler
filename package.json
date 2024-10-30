@@ -31,7 +31,7 @@
     "@book000/eslint-config": "1.7.82",
     "@book000/node-utils": "1.13.324",
     "@types/jest": "29.5.14",
-    "@types/node": "20.17.2",
+    "@types/node": "20.17.3",
     "axios": "1.7.7",
     "cheerio": "1.0.0",
     "eslint": "9.13.0",
