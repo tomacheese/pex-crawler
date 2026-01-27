@@ -9,7 +9,7 @@
 ## 共通ルール
 
 - 会話は日本語で行う。
-- PR とコミットは [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) に従う。
+- コミットメッセージおよび PR タイトルは [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) に従う。
   - `<type>(<scope>): <description>` 形式
   - `<description>` は日本語で記載
 - ブランチ命名は [Conventional Branch](https://conventional-branch.github.io) に従う。
@@ -48,6 +48,7 @@ pnpm lint
 pnpm fix
 
 # 設定スキーマの生成
+# ※ 実行前に schema ディレクトリを作成しておくこと（例: mkdir -p schema）
 pnpm generate-schema
 ```
 
@@ -71,7 +72,6 @@ pnpm generate-schema
 ## ドキュメント更新
 
 - `README.md`
-- `schema/Configuration.json` (設定構造を変更した場合)
 
 ## リポジトリ固有
 

@@ -24,7 +24,7 @@
 
 - コード内のコメントは日本語で記載する。
 - エラーメッセージは英語で記載する。
-- docstring は日本語で記載する。
+- JSDoc コメントは日本語で記載する。
 - `skipLibCheck: true` による型チェックの回避は行わない。
 
 ## 開発コマンド
@@ -48,7 +48,7 @@ pnpm fix
 
 - **機密情報の保護**: API キーや Webhook URL などの機密情報は、絶対にファイルに書き込んだりコミットしたりしない。
 - **既存パターンの尊重**: 既存の `ConfigFramework` や `Notified` クラスの設計パターンを尊重して拡張を行う。
-- **ドキュメントの整合性**: 設定を変更した場合は `schema/Configuration.json` も更新すること。
+- **ドキュメントの整合性**: 設定を変更した場合は、必要に応じて `mkdir -p schema` でディレクトリを作成したうえで `pnpm generate-schema` を実行し、`schema/Configuration.json` を再生成しておくこと。
 
 ## リポジトリ固有
 

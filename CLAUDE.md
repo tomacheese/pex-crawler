@@ -37,7 +37,7 @@
 - 日本語と英数字の間には半角スペースを挿入する。
 - 既存のエラーメッセージで絵文字が使用されている場合、それに合わせて適切な絵文字を先頭に付与する。
 - TypeScript において `skipLibCheck` を有効にしてエラーを回避してはならない。
-- 関数やインターフェースには docstring を日本語で記載する。
+- 関数やインターフェースには JSDoc コメントを日本語で記載する。
 
 ## 相談ルール
 
@@ -85,7 +85,7 @@ pnpm fix
 
 ## ドキュメント更新ルール
 
-- 設定の構造を変更した場合は、必ず `pnpm generate-schema` を実行して `schema/Configuration.json` を更新する。
+- 設定の構造を変更した場合は、必ず `schema/` ディレクトリが存在することを確認し（存在しない場合は `mkdir -p schema` などで作成し）、その上で `pnpm generate-schema` を実行して `schema/Configuration.json` を更新する。
 
 ## 作業チェックリスト
 
