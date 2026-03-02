@@ -21,8 +21,8 @@ importers:
         specifier: 24.10.15
         version: 24.10.15
       axios:
-        specifier: 1.13.5
-        version: 1.13.5
+        specifier: 1.13.6
+        version: 1.13.6
       cheerio:
         specifier: 1.2.0
         version: 1.2.0
