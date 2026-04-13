@@ -1,5 +1,4 @@
 import { load } from 'cheerio'
-import axios from 'axios'
 import { Notified } from './notified'
 import { Discord, Logger } from '@book000/node-utils'
 import { PexConfiguration } from './config'
@@ -16,8 +15,9 @@ interface Item {
 }
 
 async function getList(url: string) {
-  const response = await axios.get(url)
-  const html = response.data
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`fetch failed: ${res.status} ${res.statusText}`)
+  const html = await res.text()
   const $ = load(html)
 
   // ul.anken-list > a
