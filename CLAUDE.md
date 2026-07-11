@@ -69,9 +69,12 @@ pnpm fix
 
 ## アーキテクチャと主要ファイル
 
-- **src/main.ts**: メインロジック。スクレイピングと通知のフローを管理。
+- **src/main.ts**: メインロジック。エントリーポイント。案件の取得（`getList`）から Discord 通知までのフローを管理。HTTP 取得はネイティブの `fetch` を使用する。
 - **src/config.ts**: 設定管理クラス `PexConfiguration` の定義。
 - **src/notified.ts**: 通知済み案件の永続化管理クラス `Notified` の定義。
+- **data/**: 永続化データを格納するディレクトリ（リポジトリ管理外）。
+  - `data/config.json`: Discord 通知設定。
+  - `data/notified.json`: 通知済み案件の状態。保存先は環境変数 `NOTIFIED_PATH` で上書き可能（既定値 `data/notified.json`）。
 
 ## 実装パターン
 
@@ -82,6 +85,11 @@ pnpm fix
 
 - フレームワークとして `jest` を使用する。
 - ロジックの変更や新機能追加時には、可能な限りテストコードを追加または更新する。
+
+## セキュリティ / 機密情報
+
+- `data/config.json` に含まれる Discord の Webhook URL やトークンなどの機密情報は、絶対にコミットに含めない。
+- ログ出力に認証情報や個人情報を含めない。
 
 ## ドキュメント更新ルール
 
