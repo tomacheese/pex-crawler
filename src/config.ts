@@ -8,7 +8,7 @@ interface Config {
   }
 }
 
-export class PexConfiguration extends ConfigFramework<Config> {
+export class PexConfig extends ConfigFramework<Config> {
   protected validates(): Record<string, (config: Config) => boolean> {
     return {
       'discord is required': (config) => !!config.discord,

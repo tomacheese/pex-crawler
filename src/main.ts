@@ -1,7 +1,7 @@
 import { load } from 'cheerio'
 import { Notified } from './notified'
 import { Discord, Logger } from '@book000/node-utils'
-import { PexConfiguration } from './config'
+import { PexConfig } from './config'
 
 const ItemStatus = {
   s1: '受付中',
@@ -15,9 +15,10 @@ interface Item {
 }
 
 async function getList(url: string) {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`fetch failed: ${res.status} ${res.statusText}`)
-  const html = await res.text()
+  const response = await fetch(url)
+  if (!response.ok)
+    throw new Error(`fetch failed: ${response.status} ${response.statusText}`)
+  const html = await response.text()
   const $ = load(html)
 
   // ul.anken-list > a
@@ -56,7 +57,7 @@ async function main() {
   const logger = Logger.configure('main')
   logger.info('✨ main()')
 
-  const config = new PexConfiguration('./data/config.json')
+  const config = new PexConfig('./data/config.json')
   config.load()
   if (!config.validate()) {
     logger.error('❌ Config is invalid')
