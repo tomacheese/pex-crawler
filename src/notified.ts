@@ -13,7 +13,7 @@ export class Notified {
   }
 
   public isExists(key: string): boolean {
-    return key in this.notified
+    return Object.hasOwn(this.notified, key)
   }
 
   public isNotified(key: string, value: string): boolean {
