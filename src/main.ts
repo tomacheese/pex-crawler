@@ -2,17 +2,7 @@ import { load } from 'cheerio'
 import { Notified } from './notified'
 import { Discord, Logger } from '@book000/node-utils'
 import { PexConfiguration } from './config'
-
-const ItemStatus = {
-  s1: '受付中',
-  s2: '受付終了',
-} as const
-
-interface Item {
-  status: string
-  title: string
-  path: string
-}
+import { Item, ItemStatus, notifyItems } from './notify'
 
 async function getList(url: string) {
   const res = await fetch(url)
@@ -98,42 +88,7 @@ async function main() {
 
   // 新しく出てきたとき、ステータスに変化があったときに通知する
   const items = [...investmentList, ...timeDepositList]
-  for (const item of items) {
-    if (notified.isNotified(item.path, item.status)) {
-      continue
-    }
-    const isNew = !notified.isExists(item.path)
-
-    const log = isNew ? `New item` : `Status changed`
-    logger.info(`${log}: ${item.title} (${item.status})`)
-
-    const title = isNew
-      ? `:new:${item.title}`
-      : `:arrows_counterclockwise:${item.title}`
-    const previousStatus = notified.getNotified(item.path)
-    const description = isNew
-      ? `New item: \`${item.status}\``
-      : `Status changed: \`${previousStatus}\` -> \`${item.status}\``
-
-    if (!isFirst) {
-      await discord.sendMessage({
-        embeds: [
-          {
-            title,
-            description,
-            url: `https://pex.jp${item.path}`,
-            color: item.status === ItemStatus.s1 ? 0x00_ff_00 : 0xff_00_00,
-            timestamp: new Date().toISOString(),
-          },
-        ],
-      })
-    }
-
-    notified.setNotified(item.path, item.status)
-  }
-
-  notified.save()
-  logger.info('📝 Save notified')
+  await notifyItems(items, discord, notified, logger, isFirst)
 
   logger.info('🎉 Done')
 }
