@@ -2,6 +2,5 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
   '@parcel/watcher': true
-confirmModulesPurge: false
 minimumReleaseAgeExclude:
   - '@book000/*'
