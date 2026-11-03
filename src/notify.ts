@@ -6,6 +6,9 @@ export const ItemStatus = {
   s2: '受付終了',
 } as const
 
+/**
+ * 取得した案件。status は ItemStatus の値、path は案件ページの href。
+ */
 export interface Item {
   status: string
   title: string

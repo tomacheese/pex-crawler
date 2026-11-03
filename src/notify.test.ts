@@ -40,7 +40,7 @@ describe('notifyItems', () => {
     jest.useRealTimers()
   })
 
-  it('saves the notified state immediately after each item is processed', async () => {
+  it('1 件処理するごとに通知済み状態を即時保存する', async () => {
     const notified = createNotifiedMock()
     const logger = createLoggerMock()
     const discord = {
@@ -58,7 +58,7 @@ describe('notifyItems', () => {
     )
   })
 
-  it('continues processing remaining items when sendMessage rejects, without marking the failed item as notified', async () => {
+  it('sendMessage が失敗しても残りの案件の処理を続け、失敗した案件は通知済みにしない', async () => {
     const notified = createNotifiedMock()
     const logger = createLoggerMock()
     const discord = {
@@ -89,7 +89,7 @@ describe('notifyItems', () => {
     )
   })
 
-  it('waits between consecutive sendMessage calls', async () => {
+  it('連続する sendMessage の間に待機を挟む', async () => {
     const notified = createNotifiedMock()
     const logger = createLoggerMock()
     const discord = {
@@ -116,7 +116,7 @@ describe('notifyItems', () => {
     await promise
   })
 
-  it('does not send messages on the first run, but still records the state', async () => {
+  it('初回実行では通知を送信せず、状態のみ記録する', async () => {
     const notified = createNotifiedMock()
     const logger = createLoggerMock()
     const discord = {
