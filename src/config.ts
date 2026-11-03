@@ -1,5 +1,8 @@
 import { ConfigFramework } from '@book000/node-utils'
 
+/**
+ * Discord 通知先の設定。Webhook URL、またはトークンとチャンネル ID のいずれかを指定する。
+ */
 interface Config {
   discord: {
     webhookUrl?: string
@@ -8,6 +11,9 @@ interface Config {
   }
 }
 
+/**
+ * Discord 通知先の設定管理クラス。discord がオブジェクトであることと、各項目が文字列または未指定であることを検証する。
+ */
 export class PexConfiguration extends ConfigFramework<Config> {
   protected validates(): Record<string, (config: Config) => boolean> {
     return {
