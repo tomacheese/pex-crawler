@@ -45,8 +45,14 @@ export class Notified {
     this.notified = JSON.parse(fs.readFileSync(this.path, 'utf8'))
   }
 
-  /** 通知済み状態をファイルに書き出す。 */
+  /**
+   * 通知済み状態をファイルに書き出す。
+   * 一時ファイルへ書いてから置き換えるため、書き込み中にプロセスが停止しても
+   * 不完全なファイルが最終パスに残らない。
+   */
   public save(): void {
-    fs.writeFileSync(this.path, JSON.stringify(this.notified, null, 2))
+    const tmpPath = `${this.path}.tmp`
+    fs.writeFileSync(tmpPath, JSON.stringify(this.notified, null, 2))
+    fs.renameSync(tmpPath, this.path)
   }
 }

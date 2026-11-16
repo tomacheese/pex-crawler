@@ -28,8 +28,8 @@ CI は [book000/templates](https://github.com/book000/templates) の共通ワー
 ## 構成
 
 - `src/main.ts`: エントリーポイント。`getList`（fetch + cheerio で案件抽出）から通知までの流れを管理する。
-- `src/notify.ts`: `notifyItems`。未通知の案件を Discord に送信し、1 件ごとに状態を保存する。送信失敗時は通知済みにせず次回再送する。
-- `src/notified.ts`: `Notified`。通知済み状態（案件パス → ステータス）の永続化。
+- `src/notify.ts`: `notifyItems`。未通知の案件を Discord に送信し、1 件ごとに状態を保存する。送信失敗時は通知済みにせず次回再送する。初回実行（notified.json が未作成）では通知せず、全案件をメモリ上に記録してループ後に 1 回だけ保存する（案件が 1 件以上ある場合のみ）ため、初期化の中断で notified.json が中途半端な状態になることはない。
+- `src/notified.ts`: `Notified`。通知済み状態（案件パス → ステータス）の永続化。`save()` は `<path>.tmp` に書き込んでから最終パスへ rename する。
 - `src/config.ts`: `PexConfiguration`。`@book000/node-utils` の `ConfigFramework` による設定の読み込みと検証。
 - `data/`（リポジトリ管理外）: `config.json`（Discord 設定。Webhook URL、またはトークンとチャンネル ID）と `notified.json`（保存先は環境変数 `NOTIFIED_PATH` で変更可）。Docker では `/data` にマウントされる。
 

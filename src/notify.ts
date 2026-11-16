@@ -30,6 +30,7 @@ export async function sleep(ms: number): Promise<void> {
 
 /**
  * 未通知の案件を Discord に通知し、送信に成功するたびに通知結果を保存する。
+ * 初回実行では通知せず、全案件を記録してから 1 回だけ保存する。
  * 送信に失敗した案件は通知済みとして記録せず、次回実行時に再送を試みる。
  * @param items - 通知対象の候補となる案件一覧
  * @param discord - 送信に使用する Discord クライアント
@@ -91,8 +92,15 @@ export async function notifyItems(
       }
     }
 
-    // クラッシュ時の重複通知を防ぐため、1件処理するごとに即時保存する
+    // 初回は途中で保存すると、停止後に残りの案件が新規として通知されるため一括保存する
     notified.setNotified(item.path, item.status)
+    if (!isFirst) {
+      // クラッシュ時の重複通知を防ぐため、1 件処理するごとに即時保存する
+      notified.save()
+    }
+  }
+
+  if (isFirst && items.length > 0) {
     notified.save()
   }
 }

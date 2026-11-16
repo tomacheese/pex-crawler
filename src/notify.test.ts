@@ -130,6 +130,43 @@ describe('notifyItems', () => {
     // eslint-disable-next-line @typescript-eslint/unbound-method -- jest mock method reference
     expect(notified.setNotified).toHaveBeenCalledTimes(items.length)
     // eslint-disable-next-line @typescript-eslint/unbound-method -- jest mock method reference
-    expect(notified.save).toHaveBeenCalledTimes(items.length)
+    expect(notified.save).toHaveBeenCalledTimes(1)
+    // 全案件を記録し終えてから保存する
+    expect(
+      Math.max(...notified.setNotified.mock.invocationCallOrder)
+    ).toBeLessThan(notified.save.mock.invocationCallOrder[0])
+  })
+
+  it('初回実行の途中で停止した場合は保存せず、次回も初回扱いにできる', async () => {
+    const notified = createNotifiedMock()
+    notified.setNotified
+      .mockImplementationOnce(() => undefined)
+      .mockImplementationOnce(() => {
+        throw new Error('crash')
+      })
+    const logger = createLoggerMock()
+    const discord = {
+      sendMessage: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<Discord>
+
+    await expect(
+      notifyItems(items, discord, notified, logger, true)
+    ).rejects.toThrow('crash')
+
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- jest mock method reference
+    expect(notified.save).not.toHaveBeenCalled()
+  })
+
+  it('初回実行で案件が空の場合は保存しない', async () => {
+    const notified = createNotifiedMock()
+    const logger = createLoggerMock()
+    const discord = {
+      sendMessage: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<Discord>
+
+    await notifyItems([], discord, notified, logger, true)
+
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- jest mock method reference
+    expect(notified.save).not.toHaveBeenCalled()
   })
 })
