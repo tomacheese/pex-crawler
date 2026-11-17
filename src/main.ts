@@ -1,8 +1,8 @@
-import { load } from 'cheerio'
 import { Notified } from './notified'
 import { Discord, Logger } from '@book000/node-utils'
 import { PexConfiguration } from './config'
-import { Item, ItemStatus, notifyItems } from './notify'
+import { notifyItems } from './notify'
+import { parseList } from './parse'
 
 /**
  * PeX の案件一覧ページを取得し、案件情報を抽出する。
@@ -13,38 +13,7 @@ import { Item, ItemStatus, notifyItems } from './notify'
 async function getList(url: string) {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`fetch failed: ${res.status} ${res.statusText}`)
-  const html = await res.text()
-  const $ = load(html)
-
-  // ul.anken-list > a が 1 案件。href が案件の URL
-  // div.status のクラス (s1 / s2) でステータスを判別
-  // h2 が案件名
-
-  const items: Item[] = []
-  $('ul.anken-list > a').each((_, element) => {
-    const statusClass = $(element).find('div.status').attr('class')
-    if (!statusClass) {
-      throw new Error('statusClass is not found')
-    }
-    const status = statusClass.includes('s1') ? ItemStatus.s1 : ItemStatus.s2
-
-    const title = $(element).find('h2').text()
-    if (!title) {
-      throw new Error('title is not found')
-    }
-    const url = $(element).attr('href')
-    if (!url) {
-      throw new Error('url is not found')
-    }
-
-    items.push({
-      status,
-      title,
-      path: url,
-    })
-  })
-
-  return items
+  return parseList(await res.text())
 }
 
 /**
