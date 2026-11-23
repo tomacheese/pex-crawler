@@ -70,7 +70,7 @@ describe('notifyItems', () => {
 
     const promise = notifyItems(items, discord, notified, logger, false)
     await jest.runAllTimersAsync()
-    await expect(promise).resolves.toBeUndefined()
+    await expect(promise).resolves.toBe(1)
 
     // eslint-disable-next-line @typescript-eslint/unbound-method -- jest mock method reference
     expect(discord.sendMessage).toHaveBeenCalledTimes(items.length)

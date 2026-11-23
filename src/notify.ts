@@ -37,6 +37,7 @@ export async function sleep(ms: number): Promise<void> {
  * @param notified - 通知済み状態の永続化を管理するインスタンス
  * @param logger - ログ出力に使用するロガー
  * @param isFirst - 初回実行かどうか(true の場合、通知は送信せず状態のみ記録する)
+ * @returns 送信に失敗した案件の件数
  */
 export async function notifyItems(
   items: Item[],
@@ -44,8 +45,9 @@ export async function notifyItems(
   notified: Notified,
   logger: Logger,
   isFirst: boolean
-): Promise<void> {
+): Promise<number> {
   let hasSentMessage = false
+  let failures = 0
   for (const item of items) {
     if (notified.isNotified(item.path, item.status)) {
       continue
@@ -83,6 +85,7 @@ export async function notifyItems(
           ],
         })
       } catch (error) {
+        failures++
         // 送信に失敗した場合は通知未済のままにし、次回実行時に再送を試みる
         logger.error(
           `❌ Failed to send Discord message: ${item.title}`,
@@ -103,4 +106,5 @@ export async function notifyItems(
   if (isFirst && items.length > 0) {
     notified.save()
   }
+  return failures
 }
