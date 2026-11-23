@@ -30,6 +30,7 @@ async function main() {
     for (const failure of config.getValidateFailures()) {
       logger.error('- ' + failure)
     }
+    process.exitCode = 1
     return
   }
 
@@ -65,7 +66,12 @@ async function main() {
 
   // 新しく出てきたとき、ステータスに変化があったときに通知する
   const items = [...investmentList, ...timeDepositList]
-  await notifyItems(items, discord, notified, logger, isFirst)
+  const failures = await notifyItems(items, discord, notified, logger, isFirst)
+  if (failures > 0) {
+    logger.error(`❌ Failed to send ${failures} Discord message(s)`)
+    process.exitCode = 1
+    return
+  }
 
   logger.info('🎉 Done')
 }
